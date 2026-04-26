@@ -1,0 +1,44 @@
+
+==============================================
+  RETIRO ESPIRITUAL 2027
+  Igreja Batista Lírio Armação
+  "Enraizar. Crescer. Frutificar."
+==============================================
+
+ESTRUTURA DO PROJETO:
+  index.html       → Página inicial do evento (pública)
+  login.html       → Tela de login por perfis
+  inscricao.html   → Formulário de inscrição em 5 etapas
+  dashboard.html   → Sistema administrativo completo (15 módulos)
+  download.html    → Esta página de download
+  css/main.css     → Estilos globais
+  js/app.js        → Funções globais e utilitários
+  js/dashboard.js  → Lógica do painel administrativo
+  README.md        → Documentação completa do sistema
+
+CREDENCIAIS DE ACESSO (DEMONSTRAÇÃO):
+  Administrador  → admin@retiro2027.com       / admin2027
+  Financeiro     → financeiro@retiro2027.com  / fin2027
+  Hospedagem     → hospedagem@retiro2027.com  / hosp2027
+  Alimentação    → alimentacao@retiro2027.com / ali2027
+  Retirante      → retirante@email.com        / retiro123
+
+COMO USAR LOCALMENTE:
+  ⚠️  Este sistema usa uma API REST de banco de dados que
+      requer estar hospedado na plataforma Genspark.
+      Para uso local completo, é necessário adaptar as
+      chamadas de API (fetch 'tables/...') para um
+      backend próprio (Node.js, PHP, Python, etc.)
+
+  Para visualização estática:
+  1. Abra index.html em qualquer navegador
+  2. As páginas de front-end funcionam normalmente
+  3. As funcionalidades de dados requerem o backend
+
+HOSPEDAGEM ONLINE (RECOMENDADO):
+  Publique na plataforma Genspark para funcionamento
+  completo com banco de dados integrado.
+
+==============================================
+  Gerado em: 22/04/2026, 22:32:40
+==============================================

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Download - Retiro Espiritual 2027</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0a2340 0%, #1a3f6f 60%, #0a2340 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 24px;
+      padding: 48px 44px;
+      max-width: 560px;
+      width: 100%;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+      text-align: center;
+    }
+
+    .logo-wrap {
+      width: 80px; height: 80px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #0a2340, #1a3f6f);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+      margin: 0 auto 20px;
+      box-shadow: 0 8px 24px rgba(10,35,64,0.3);
+    }
+
+    h1 { font-size: 1.6rem; color: #0a2340; margin-bottom: 6px; }
+    .subtitle { color: #6c757d; font-size: 0.9rem; margin-bottom: 32px; }
+
+    .files-list {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 28px;
+      text-align: left;
+    }
+
+    .files-list-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #6c757d;
+      margin-bottom: 12px;
+    }
+
+    .file-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      color: #495057;
+      transition: background 0.2s;
+    }
+
+    .file-item:hover { background: #e9ecef; }
+
+    .file-item i { color: #2563a8; width: 16px; text-align: center; }
+    .file-size { margin-left: auto; font-size: 0.75rem; color: #adb5bd; font-family: monospace; }
+
+    .btn-download {
+      width: 100%;
+      padding: 16px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(135deg, #c9a84c, #a07830);
+      color: white;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 20px rgba(201,168,76,0.35);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .btn-download:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(201,168,76,0.5);
+    }
+
+    .btn-download:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+
+    /* PROGRESS */
+    .progress-wrap {
+      margin-top: 20px;
+      display: none;
+    }
+
+    .progress-bar-bg {
+      background: #e9ecef;
+      border-radius: 20px;
+      height: 10px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #c9a84c, #2563a8);
+      border-radius: 20px;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .progress-text {
+      font-size: 0.8rem;
+      color: #6c757d;
+      text-align: center;
+    }
+
+    /* SUCCESS */
+    .success-msg {
+      display: none;
+      margin-top: 16px;
+      background: #d4edda;
+      border: 1px solid #c3e6cb;
+      color: #155724;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 0.875rem;
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ERROR */
+    .error-msg {
+      display: none;
+      margin-top: 16px;
+      background: #f8d7da;
+      border: 1px solid #f5c6cb;
+      color: #721c24;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 0.875rem;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 20px;
+      color: #6c757d;
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: #0a2340; }
+
+    .total-size {
+      font-size: 0.8rem;
+      color: #6c757d;
+      margin-top: 8px;
+    }
+
+    .badge-new {
+      background: #d4edda;
+      color: #155724;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 6px;
+      margin-left: 6px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="logo-wrap">⛪</div>
+  <h1>📦 Download do Sistema</h1>
+  <p class="subtitle">Retiro Espiritual 2027 — Igreja Batista Lírio Armação<br>
+    Baixe todos os arquivos do projeto em um ZIP completo</p>
+
+  <div class="files-list">
+    <div class="files-list-title">📁 Arquivos incluídos</div>
+
+    <div class="file-item">
+      <i class="fas fa-file-code"></i>
+      <span>index.html <span class="badge-new">Landing Page</span></span>
+      <span class="file-size">~25 KB</span>
+    </div>
+    <div class="file-item">
+      <i class="fas fa-file-code"></i>
+      <span>login.html</span>
+      <span class="file-size">~14 KB</span>
+    </div>
+    <div class="file-item">
+      <i class="fas fa-file-code"></i>
+      <span>inscricao.html <span class="badge-new">5 etapas</span></span>
+      <span class="file-size">~38 KB</span>
+    </div>
+    <div class="file-item">
+      <i class="fas fa-file-code"></i>
+      <span>dashboard.html <span class="badge-new">15 módulos</span></span>
+      <span class="file-size">~70 KB</span>
+    </div>
+    <div class="file-item">
+      <i class="fas fa-file-code"></i>
+      <span>download.html</span>
+      <span class="file-size">~8 KB</span>
+    </div>
+    <div class="file-item">
+      <i class="fas fa-file-alt" style="color:#e83e8c"></i>
+      <span>css/main.css</span>
+      <span class="file-size">~26 KB</span>
+    </div>
+    <div class="file-item">
+      <i class="fas fa-file-alt" style="color:#f0ad4e"></i>
+      <span>js/app.js</span>
+      <span class="file-size">~10 KB</span>
+    </div>
+    <div class="file-item">
+      <i class="fas fa-file-alt" style="color:#f0ad4e"></i>
+      <span>js/dashboard.js <span class="badge-new">+63 KB</span></span>
+      <span class="file-size">~63 KB</span>
+    </div>
+    <div class="file-item">
+      <i class="fas fa-file-alt" style="color:#6c757d"></i>
+      <span>README.md</span>
+      <span class="file-size">~7 KB</span>
+    </div>
+  </div>
+
+  <p class="total-size">📊 Tamanho total estimado: <strong>~261 KB</strong> (sem dependências externas CDN)</p>
+
+  <br>
+
+  <button class="btn-download" id="btnDownload" onclick="gerarZip()">
+    <i class="fas fa-file-archive"></i>
+    Gerar e Baixar ZIP
+  </button>
+
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressBar"></div>
+    </div>
+    <div class="progress-text" id="progressText">Carregando arquivos...</div>
+  </div>
+
+  <div class="success-msg" id="successMsg">
+    <i class="fas fa-check-circle"></i>
+    <span>ZIP gerado com sucesso! O download deve iniciar automaticamente.</span>
+  </div>
+
+  <div class="error-msg" id="errorMsg">
+    <i class="fas fa-exclamation-circle"></i>
+    <span id="errorText">Erro ao gerar ZIP.</span>
+  </div>
+
+  <br>
+  <a href="index.html" class="back-link">
+    <i class="fas fa-arrow-left"></i> Voltar ao site
+  </a>
+</div>
+
+<script>
+  // Lista de arquivos para incluir no ZIP
+  // Cada entrada: { zipPath, fetchPath }
+  const FILES = [
+    { zipPath: 'retiro2027/index.html',        fetchPath: 'index.html' },
+    { zipPath: 'retiro2027/login.html',         fetchPath: 'login.html' },
+    { zipPath: 'retiro2027/inscricao.html',     fetchPath: 'inscricao.html' },
+    { zipPath: 'retiro2027/dashboard.html',     fetchPath: 'dashboard.html' },
+    { zipPath: 'retiro2027/download.html',      fetchPath: 'download.html' },
+    { zipPath: 'retiro2027/css/main.css',       fetchPath: 'css/main.css' },
+    { zipPath: 'retiro2027/js/app.js',          fetchPath: 'js/app.js' },
+    { zipPath: 'retiro2027/js/dashboard.js',    fetchPath: 'js/dashboard.js' },
+    { zipPath: 'retiro2027/README.md',          fetchPath: 'README.md' },
+  ];
+
+  function setProgress(pct, text) {
+    document.getElementById('progressBar').style.width = pct + '%';
+    document.getElementById('progressText').textContent = text;
+  }
+
+  function showError(msg) {
+    const el = document.getElementById('errorMsg');
+    document.getElementById('errorText').textContent = msg;
+    el.style.display = 'flex';
+    setTimeout(() => el.style.display = 'none', 6000);
+  }
+
+  async function gerarZip() {
+    const btn = document.getElementById('btnDownload');
+    const progressWrap = document.getElementById('progressWrap');
+    const successMsg = document.getElementById('successMsg');
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gerando ZIP...';
+    progressWrap.style.display = 'block';
+    successMsg.style.display = 'none';
+
+    try {
+      const zip = new JSZip();
+      const total = FILES.length;
+
+      for (let i = 0; i < total; i++) {
+        const file = FILES[i];
+        const pct = Math.round(((i) / total) * 90);
+        setProgress(pct, `Carregando ${file.fetchPath}... (${i + 1}/${total})`);
+
+        try {
+          const response = await fetch(file.fetchPath);
+          if (!response.ok) {
+            console.warn(`Arquivo não encontrado: ${file.fetchPath} (${response.status})`);
+            // Adiciona arquivo com aviso no lugar
+            zip.file(file.zipPath, `/* Arquivo ${file.fetchPath} não encontrado no servidor */`);
+            continue;
+          }
+          const text = await response.text();
+          zip.file(file.zipPath, text);
+        } catch (fetchErr) {
+          console.warn(`Erro ao buscar ${file.fetchPath}:`, fetchErr);
+          zip.file(file.zipPath, `/* Erro ao carregar ${file.fetchPath} */`);
+        }
+      }
+
+      setProgress(92, 'Compactando arquivos...');
+
+      // Adiciona um arquivo LEIA-ME de instruções
+      zip.file('retiro2027/INSTRUCOES.txt', `
+==============================================
+  RETIRO ESPIRITUAL 2027
+  Igreja Batista Lírio Armação
+  "Enraizar. Crescer. Frutificar."
+==============================================
+
+ESTRUTURA DO PROJETO:
+  index.html       → Página inicial do evento (pública)
+  login.html       → Tela de login por perfis
+  inscricao.html   → Formulário de inscrição em 5 etapas
+  dashboard.html   → Sistema administrativo completo (15 módulos)
+  download.html    → Esta página de download
+  css/main.css     → Estilos globais
+  js/app.js        → Funções globais e utilitários
+  js/dashboard.js  → Lógica do painel administrativo
+  README.md        → Documentação completa do sistema
+
+CREDENCIAIS DE ACESSO (DEMONSTRAÇÃO):
+  Administrador  → admin@retiro2027.com       / admin2027
+  Financeiro     → financeiro@retiro2027.com  / fin2027
+  Hospedagem     → hospedagem@retiro2027.com  / hosp2027
+  Alimentação    → alimentacao@retiro2027.com / ali2027
+  Retirante      → retirante@email.com        / retiro123
+
+COMO USAR LOCALMENTE:
+  ⚠️  Este sistema usa uma API REST de banco de dados que
+      requer estar hospedado na plataforma Genspark.
+      Para uso local completo, é necessário adaptar as
+      chamadas de API (fetch 'tables/...') para um
+      backend próprio (Node.js, PHP, Python, etc.)
+
+  Para visualização estática:
+  1. Abra index.html em qualquer navegador
+  2. As páginas de front-end funcionam normalmente
+  3. As funcionalidades de dados requerem o backend
+
+HOSPEDAGEM ONLINE (RECOMENDADO):
+  Publique na plataforma Genspark para funcionamento
+  completo com banco de dados integrado.
+
+==============================================
+  Gerado em: ${new Date().toLocaleString('pt-BR')}
+==============================================
+`);
+
+      setProgress(96, 'Finalizando ZIP...');
+
+      const blob = await zip.generateAsync({
+        type: 'blob',
+        compression: 'DEFLATE',
+        compressionOptions: { level: 6 }
+      }, (metadata) => {
+        const pct = 96 + Math.round(metadata.percent * 0.04);
+        setProgress(Math.min(pct, 99), `Compactando... ${Math.round(metadata.percent)}%`);
+      });
+
+      setProgress(100, 'Pronto! Iniciando download...');
+
+      // Dispara o download
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'retiro-espiritual-2027.zip';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 5000);
+
+      // Mostra sucesso
+      successMsg.style.display = 'flex';
+      btn.innerHTML = '<i class="fas fa-check"></i> ZIP Gerado com Sucesso!';
+      btn.style.background = 'linear-gradient(135deg, #28a745, #1e7e34)';
+
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-file-archive"></i> Gerar e Baixar ZIP Novamente';
+        btn.style.background = 'linear-gradient(135deg, #c9a84c, #a07830)';
+        progressWrap.style.display = 'none';
+      }, 5000);
+
+    } catch (err) {
+      console.error('Erro ao gerar ZIP:', err);
+      showError('Erro ao gerar o ZIP: ' + err.message);
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-file-archive"></i> Tentar Novamente';
+      progressWrap.style.display = 'none';
+    }
+  }
+</script>
+<script src="https://www.genspark.ai/sandbox_inspect.js"></script></body>
+</html>

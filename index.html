@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Retiro Espiritual 2027 - Igreja Batista Lírio Armação</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+
+    /* LANDING PAGE */
+    .landing-page {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0a2340 0%, #1a3f6f 40%, #0a2340 100%);
+      overflow-x: hidden;
+    }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: 
+        radial-gradient(ellipse at 20% 50%, rgba(201,168,76,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(37,99,168,0.15) 0%, transparent 50%);
+    }
+
+    .hero-particles {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .particle {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--dourado);
+      opacity: 0;
+      animation: float 6s infinite;
+    }
+
+    @keyframes float {
+      0% { opacity: 0; transform: translateY(100vh) scale(0); }
+      10% { opacity: 0.6; }
+      90% { opacity: 0.6; }
+      100% { opacity: 0; transform: translateY(-100px) scale(1); }
+    }
+
+    /* NAV */
+    .hero-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 16px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(10,35,64,0.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(201,168,76,0.2);
+    }
+
+    .nav-logo { display: flex; align-items: center; gap: 14px; }
+    .nav-logo img { width: 44px; height: 44px; object-fit: contain; border-radius: 8px; }
+    .nav-logo-text { color: white; }
+    .nav-logo-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      color: var(--dourado);
+      line-height: 1.2;
+      font-weight: 700;
+    }
+    .nav-logo-sub { font-size: 0.7rem; color: rgba(255,255,255,0.6); }
+
+    .nav-links { display: flex; gap: 8px; align-items: center; }
+    .nav-link {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      font-size: 0.85rem;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+    .nav-link:hover { color: var(--dourado); background: rgba(201,168,76,0.1); }
+
+    .nav-cta {
+      background: linear-gradient(135deg, var(--dourado), var(--dourado-escuro));
+      color: white !important;
+      font-weight: 700;
+      padding: 10px 22px !important;
+    }
+
+    /* HERO CONTENT */
+    .hero-content {
+      text-align: center;
+      max-width: 900px;
+      z-index: 1;
+      padding-top: 80px;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(201,168,76,0.15);
+      border: 1px solid rgba(201,168,76,0.3);
+      color: var(--dourado-claro);
+      padding: 6px 18px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 24px;
+    }
+
+    .hero-logo {
+      width: 140px;
+      height: 140px;
+      object-fit: contain;
+      margin: 0 auto 24px;
+      display: block;
+      filter: drop-shadow(0 8px 32px rgba(201,168,76,0.4));
+      animation: logoFloat 4s ease-in-out infinite;
+    }
+
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .hero-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(2rem, 5vw, 3.8rem);
+      font-weight: 700;
+      color: white;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .hero-title span {
+      background: linear-gradient(135deg, var(--dourado-claro), var(--dourado));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-slogan {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1rem, 2.5vw, 1.5rem);
+      color: var(--dourado-claro);
+      margin-bottom: 16px;
+      font-style: italic;
+      opacity: 0.9;
+    }
+
+    .hero-slogan::before, .hero-slogan::after {
+      content: '✦';
+      margin: 0 12px;
+      font-size: 0.8em;
+      opacity: 0.6;
+    }
+
+    .hero-desc {
+      color: rgba(255,255,255,0.7);
+      font-size: 1rem;
+      max-width: 600px;
+      margin: 0 auto 32px;
+      line-height: 1.7;
+    }
+
+    .hero-meta {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 36px;
+    }
+
+    .hero-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255,255,255,0.85);
+      font-size: 0.9rem;
+    }
+
+    .hero-meta-item i { color: var(--dourado); font-size: 1rem; }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-hero-primary {
+      background: linear-gradient(135deg, var(--dourado), var(--dourado-escuro));
+      color: white;
+      padding: 16px 36px;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 8px 30px rgba(201,168,76,0.35);
+    }
+
+    .btn-hero-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(201,168,76,0.5);
+    }
+
+    .btn-hero-outline {
+      background: transparent;
+      color: white;
+      padding: 16px 36px;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      border: 2px solid rgba(255,255,255,0.4);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-hero-outline:hover {
+      border-color: var(--dourado);
+      color: var(--dourado);
+      background: rgba(201,168,76,0.1);
+    }
+
+    /* COUNTDOWN */
+    .countdown-section {
+      padding: 60px 20px;
+      background: rgba(255,255,255,0.04);
+      border-top: 1px solid rgba(201,168,76,0.15);
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+    }
+
+    .countdown-container { max-width: 900px; margin: 0 auto; text-align: center; }
+    .countdown-label {
+      color: var(--dourado-claro);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 24px;
+    }
+
+    .countdown-grid {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .countdown-item {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(201,168,76,0.25);
+      border-radius: 16px;
+      padding: 24px 30px;
+      min-width: 100px;
+    }
+
+    .countdown-num {
+      font-size: 3rem;
+      font-weight: 800;
+      color: white;
+      font-family: 'Cinzel', serif;
+      line-height: 1;
+      color: var(--dourado-claro);
+    }
+
+    .countdown-unit {
+      color: rgba(255,255,255,0.6);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+
+    /* ACOMODACOES SECTION */
+    .section {
+      padding: 70px 20px;
+    }
+
+    .section-container { max-width: 1100px; margin: 0 auto; }
+
+    .section-header { text-align: center; margin-bottom: 48px; }
+
+    .section-eyebrow {
+      display: inline-block;
+      color: var(--dourado-claro);
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      color: white;
+      margin-bottom: 12px;
+    }
+
+    .section-subtitle {
+      color: rgba(255,255,255,0.6);
+      font-size: 1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .accom-landing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .accom-landing-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 16px;
+      padding: 28px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .accom-landing-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--dourado), var(--dourado-claro));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .accom-landing-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(201,168,76,0.5);
+      background: rgba(255,255,255,0.09);
+    }
+
+    .accom-landing-card:hover::before { opacity: 1; }
+
+    .accom-card-icon {
+      width: 52px; height: 52px;
+      border-radius: 12px;
+      background: rgba(201,168,76,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+    }
+
+    .accom-card-name {
+      color: white;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .accom-card-desc {
+      color: rgba(255,255,255,0.6);
+      font-size: 0.85rem;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    .accom-card-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .accom-card-price {
+      color: var(--dourado-claro);
+      font-size: 1.5rem;
+      font-weight: 800;
+    }
+    .accom-card-price span { font-size: 0.75rem; color: rgba(255,255,255,0.5); font-weight: 400; display: block; }
+
+    .accom-card-units {
+      background: rgba(201,168,76,0.15);
+      color: var(--dourado-claro);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    /* STEPS SECTION */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
+    }
+
+    .step-card {
+      text-align: center;
+      padding: 32px 20px;
+    }
+
+    .step-num {
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--dourado), var(--dourado-escuro));
+      color: white;
+      font-size: 1.4rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      box-shadow: 0 8px 24px rgba(201,168,76,0.3);
+    }
+
+    .step-title { color: white; font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+    .step-text { color: rgba(255,255,255,0.6); font-size: 0.875rem; line-height: 1.6; }
+
+    /* CTA FOOTER */
+    .cta-section {
+      padding: 80px 20px;
+      text-align: center;
+      background: linear-gradient(135deg, rgba(201,168,76,0.12), rgba(37,99,168,0.12));
+      border-top: 1px solid rgba(201,168,76,0.2);
+    }
+
+    .cta-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
+      color: white;
+      margin-bottom: 16px;
+    }
+
+    .cta-sub { color: rgba(255,255,255,0.6); margin-bottom: 36px; font-size: 1rem; }
+
+    /* FOOTER */
+    .landing-footer {
+      background: rgba(0,0,0,0.3);
+      border-top: 1px solid rgba(201,168,76,0.15);
+      padding: 30px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-text { color: rgba(255,255,255,0.5); font-size: 0.8rem; }
+    .footer-brand { color: var(--dourado); font-weight: 600; }
+
+    /* Scroll reveal */
+    .reveal { opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 768px) {
+      .hero-nav { padding: 12px 20px; }
+      .nav-links .nav-link:not(.nav-cta) { display: none; }
+      .countdown-item { min-width: 70px; padding: 16px 18px; }
+      .countdown-num { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="landing-page" id="landingPage">
+    <!-- NAV -->
+    <nav class="hero-nav">
+      <div class="nav-logo">
+        <img src="https://sspark.genspark.ai/cfimages?u1=Wk24Iwt0vbKZ%2Fy8LL7co7UeRYXVYdQRRIKD%2F6iXzE5vIIWo3JZfIlvbJe5DdSa9OVXZXHcYN9LKKwrAlz2i8kIShOHKpWhano8ZISMFhbhXdGAT1eRxEd68hYAYgmNo7k6%2BvpJbPi2Wa4vop%2FnnN2vVtGTk%3D&u2=785OrhxFe5ifE7JK&width=2560" alt="Logo Igreja Batista Lírio Armação" onerror="this.style.display='none'">
+        <div class="nav-logo-text">
+          <div class="nav-logo-name">Igreja Batista<br>Lírio Armação</div>
+        </div>
+      </div>
+      <div class="nav-links">
+        <a href="#acomodacoes" class="nav-link">Acomodações</a>
+        <a href="#como-funciona" class="nav-link">Como Funciona</a>
+        <a href="inscricao.html" class="nav-link nav-cta">
+          <i class="fas fa-pen-to-square"></i> Inscreva-se
+        </a>
+        <a href="login.html" class="nav-link" style="color: rgba(255,255,255,0.6);">
+          <i class="fas fa-sign-in-alt"></i> Login
+        </a>
+        <a href="download.html" class="nav-link" style="color: rgba(255,255,255,0.5); font-size:0.75rem;" title="Baixar código fonte">
+          <i class="fas fa-download"></i>
+        </a>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-particles" id="particles"></div>
+      <div class="hero-content">
+        <div class="hero-eyebrow">
+          <i class="fas fa-church"></i>
+          Retiro Espiritual 2027
+        </div>
+        <img 
+          src="https://sspark.genspark.ai/cfimages?u1=Wk24Iwt0vbKZ%2Fy8LL7co7UeRYXVYdQRRIKD%2F6iXzE5vIIWo3JZfIlvbJe5DdSa9OVXZXHcYN9LKKwrAlz2i8kIShOHKpWhano8ZISMFhbhXdGAT1eRxEd68hYAYgmNo7k6%2BvpJbPi2Wa4vop%2FnnN2vVtGTk%3D&u2=785OrhxFe5ifE7JK&width=2560" 
+          alt="Logo Retiro 2027"
+          class="hero-logo"
+          onerror="this.style.display='none'"
+        >
+        <h1 class="hero-title">Retiro <span>Espiritual</span> 2027</h1>
+        <p class="hero-slogan">Enraizar. Crescer. Frutificar.</p>
+        <p class="hero-desc">
+          Um tempo especial de renovação, comunhão e busca de Deus. 
+          Venha viver dias transformadores com a família da Igreja Batista Lírio Armação.
+        </p>
+        <div class="hero-meta">
+          <div class="hero-meta-item">
+            <i class="fas fa-calendar-alt"></i>
+            <span>05 a 10 de Fevereiro de 2027</span>
+          </div>
+          <div class="hero-meta-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Hotel Fazenda Amoras, Santo Antônio de Jesus - BA</span>
+          </div>
+          <div class="hero-meta-item">
+            <i class="fas fa-ticket-alt"></i>
+            <span>Inscrições abertas desde 18/04/2026</span>
+          </div>
+        </div>
+        <div class="hero-actions">
+          <a href="inscricao.html" class="btn-hero-primary">
+            <i class="fas fa-pen-to-square"></i>
+            Fazer Inscrição
+          </a>
+          <a href="login.html" class="btn-hero-outline">
+            <i class="fas fa-user-circle"></i>
+            Área do Retirante
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- COUNTDOWN -->
+    <div class="countdown-section">
+      <div class="countdown-container">
+        <div class="countdown-label">⏳ Contagem regressiva para o Retiro</div>
+        <div class="countdown-grid">
+          <div class="countdown-item">
+            <div class="countdown-num" id="cd-dias">000</div>
+            <div class="countdown-unit">Dias</div>
+          </div>
+          <div class="countdown-item">
+            <div class="countdown-num" id="cd-horas">00</div>
+            <div class="countdown-unit">Horas</div>
+          </div>
+          <div class="countdown-item">
+            <div class="countdown-num" id="cd-min">00</div>
+            <div class="countdown-unit">Minutos</div>
+          </div>
+          <div class="countdown-item">
+            <div class="countdown-num" id="cd-seg">00</div>
+            <div class="countdown-unit">Segundos</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACOMODAÇÕES -->
+    <section class="section" id="acomodacoes">
+      <div class="section-container">
+        <div class="section-header reveal">
+          <div class="section-eyebrow">✦ Acomodações disponíveis</div>
+          <h2 class="section-title">Escolha sua Acomodação</h2>
+          <p class="section-subtitle">Temos opções para todos os perfis, com conforto e praticidade para seu retiro.</p>
+        </div>
+        <div class="accom-landing-grid">
+          <div class="accom-landing-card reveal">
+            <div class="accom-card-icon" style="background:rgba(233,30,140,0.12)">🌸</div>
+            <div class="accom-card-name">Apartamento Duplo</div>
+            <div class="accom-card-desc">Ideal para casais ou duplas. Ambiente aconchegante com toda a estrutura do hotel fazenda.</div>
+            <div class="accom-card-info">
+              <div class="accom-card-price">R$ 4.000<span>por apartamento</span></div>
+              <div class="accom-card-units">18 unidades</div>
+            </div>
+          </div>
+          <div class="accom-landing-card reveal">
+            <div class="accom-card-icon" style="background:rgba(230,126,34,0.12)">🍊</div>
+            <div class="accom-card-name">Apartamento Triplo</div>
+            <div class="accom-card-desc">Para grupos de três pessoas. Amplo espaço para descanso e comunhão após os momentos do retiro.</div>
+            <div class="accom-card-info">
+              <div class="accom-card-price">R$ 5.400<span>por apartamento</span></div>
+              <div class="accom-card-units">25 unidades</div>
+            </div>
+          </div>
+          <div class="accom-landing-card reveal">
+            <div class="accom-card-icon" style="background:rgba(33,150,243,0.12)">🐦</div>
+            <div class="accom-card-name">Apartamento Quádruplo</div>
+            <div class="accom-card-desc">Perfeito para famílias ou grupos de quatro. Espaçoso e bem equipado para uma estadia confortável.</div>
+            <div class="accom-card-info">
+              <div class="accom-card-price">R$ 6.600<span>por apartamento</span></div>
+              <div class="accom-card-units">18 unidades</div>
+            </div>
+          </div>
+          <div class="accom-landing-card reveal">
+            <div class="accom-card-icon" style="background:rgba(39,174,96,0.12)">🌳</div>
+            <div class="accom-card-name">Apartamento Quíntuplo</div>
+            <div class="accom-card-desc">Para grupos de cinco. Amplo espaço familiar com toda a estrutura do hotel para o seu grupo.</div>
+            <div class="accom-card-info">
+              <div class="accom-card-price">R$ 7.500<span>por apartamento</span></div>
+              <div class="accom-card-units">3 unidades</div>
+            </div>
+          </div>
+          <div class="accom-landing-card reveal">
+            <div class="accom-card-icon" style="background:rgba(243,156,18,0.12)">⭐</div>
+            <div class="accom-card-name">Suíte Master</div>
+            <div class="accom-card-desc">Conforto premium para quem deseja o melhor durante o retiro. Espaço superior e exclusivo.</div>
+            <div class="accom-card-info">
+              <div class="accom-card-price">R$ 6.500<span>por suíte</span></div>
+              <div class="accom-card-units">2 unidades</div>
+            </div>
+          </div>
+          <div class="accom-landing-card reveal">
+            <div class="accom-card-icon" style="background:rgba(156,39,176,0.12)">🏠</div>
+            <div class="accom-card-name">Alojamentos</div>
+            <div class="accom-card-desc">Alojamentos Feminino e Masculino separados, econômicos e práticos. 30 vagas cada.</div>
+            <div class="accom-card-info">
+              <div class="accom-card-price">R$ 1.300<span>por pessoa</span></div>
+              <div class="accom-card-units">60 vagas</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMO FUNCIONA -->
+    <section class="section" id="como-funciona" style="padding-top: 0;">
+      <div class="section-container">
+        <div class="section-header reveal">
+          <div class="section-eyebrow">✦ Passo a passo</div>
+          <h2 class="section-title">Como Participar</h2>
+          <p class="section-subtitle">Processo simples e rápido para garantir sua vaga no retiro.</p>
+        </div>
+        <div class="steps-grid">
+          <div class="step-card reveal">
+            <div class="step-num">1</div>
+            <div class="step-title">Faça sua Inscrição</div>
+            <div class="step-text">Preencha o formulário com seus dados pessoais, incluindo informações de acompanhantes se houver.</div>
+          </div>
+          <div class="step-card reveal">
+            <div class="step-num">2</div>
+            <div class="step-title">Escolha a Acomodação</div>
+            <div class="step-text">Selecione o tipo de acomodação que melhor se adequa ao seu grupo e orçamento.</div>
+          </div>
+          <div class="step-card reveal">
+            <div class="step-num">3</div>
+            <div class="step-title">Realize o Pagamento</div>
+            <div class="step-text">Efetue o pagamento via PIX, cartão, transferência ou outra forma disponível e envie o comprovante.</div>
+          </div>
+          <div class="step-card reveal">
+            <div class="step-num">4</div>
+            <div class="step-title">Confirmação</div>
+            <div class="step-text">Receba a confirmação da sua inscrição e prepare-se para dias incríveis com a família da igreja.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+      <div class="section-container">
+        <h2 class="cta-title reveal">Garanta Sua Vaga Agora!</h2>
+        <p class="cta-sub reveal">As vagas são limitadas. Não perca a oportunidade de vivenciar este momento especial.</p>
+        <div class="hero-actions reveal">
+          <a href="inscricao.html" class="btn-hero-primary">
+            <i class="fas fa-pen-to-square"></i>
+            Fazer Inscrição
+          </a>
+          <a href="login.html" class="btn-hero-outline">
+            <i class="fas fa-sign-in-alt"></i>
+            Já sou inscrito
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="landing-footer">
+      <div class="footer-text">
+        © 2027 <span class="footer-brand">Igreja Batista Lírio Armação</span> — Todos os direitos reservados
+      </div>
+      <div class="footer-text">
+        Retiro Espiritual 2027 | Hotel Fazenda Amoras, Santo Antônio de Jesus - BA
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // PARTICLES
+    function createParticles() {
+      const container = document.getElementById('particles');
+      for (let i = 0; i < 30; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.animationDelay = Math.random() * 6 + 's';
+        p.style.animationDuration = (Math.random() * 4 + 4) + 's';
+        p.style.width = (Math.random() * 3 + 1) + 'px';
+        p.style.height = p.style.width;
+        container.appendChild(p);
+      }
+    }
+    createParticles();
+
+    // COUNTDOWN
+    function updateCountdown() {
+      const target = new Date('2027-02-05T08:00:00');
+      const now = new Date();
+      const diff = target - now;
+
+      if (diff <= 0) {
+        document.getElementById('cd-dias').textContent = '000';
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+      document.getElementById('cd-dias').textContent = String(days).padStart(3, '0');
+      document.getElementById('cd-horas').textContent = String(hours).padStart(2, '0');
+      document.getElementById('cd-min').textContent = String(mins).padStart(2, '0');
+      document.getElementById('cd-seg').textContent = String(secs).padStart(2, '0');
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    // SCROLL REVEAL
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // SMOOTH SCROLL
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  </script>
+<script src="https://www.genspark.ai/sandbox_inspect.js"></script></body>
+</html>

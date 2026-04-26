@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inscrição - Retiro Espiritual 2027</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background: var(--cinza-100); }
+
+    .inscricao-wrapper {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .inscricao-header {
+      background: linear-gradient(135deg, var(--azul-escuro), var(--azul-medio));
+      border-radius: var(--raio-lg) var(--raio-lg) 0 0;
+      padding: 30px 36px;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .inscricao-header img {
+      width: 70px; height: 70px;
+      object-fit: contain;
+      border-radius: 10px;
+    }
+
+    .inscricao-header h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.5rem;
+      color: white;
+      margin-bottom: 4px;
+    }
+
+    .inscricao-header p {
+      color: var(--dourado-claro);
+      font-size: 0.9rem;
+      font-style: italic;
+    }
+
+    .inscricao-header small {
+      color: rgba(255,255,255,0.6);
+      font-size: 0.8rem;
+      display: block;
+      margin-top: 4px;
+    }
+
+    /* STEPPER */
+    .stepper-bar {
+      background: white;
+      padding: 20px 36px;
+      border-bottom: 1px solid var(--cinza-200);
+      overflow-x: auto;
+    }
+
+    .step-wrapper { display: flex; flex-direction: column; align-items: center; flex: 1; }
+
+    .step-wrapper:last-child { flex: none; }
+
+    /* FORM SECTION */
+    .inscricao-form {
+      background: white;
+      padding: 32px 36px;
+    }
+
+    .inscricao-footer {
+      background: white;
+      padding: 20px 36px;
+      border-top: 1px solid var(--cinza-200);
+      border-radius: 0 0 var(--raio-lg) var(--raio-lg);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    /* SECTION HEADER */
+    .form-section-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--azul-escuro);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--dourado);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-section-title i { color: var(--dourado); }
+
+    /* ACOMODAÇÃO SELECTION */
+    .accom-type-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .accom-type-card {
+      border: 2px solid var(--cinza-300);
+      border-radius: var(--raio);
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: var(--cinza-100);
+    }
+
+    .accom-type-card:hover {
+      border-color: var(--azul-claro);
+      background: var(--azul-suave);
+    }
+
+    .accom-type-card.selected {
+      border-color: var(--dourado);
+      background: #fffbf0;
+      box-shadow: 0 0 0 3px rgba(201,168,76,0.2);
+    }
+
+    .accom-type-card .icon { font-size: 1.5rem; margin-bottom: 8px; display: block; }
+    .accom-type-card .nome { font-weight: 700; color: var(--azul-escuro); font-size: 0.9rem; margin-bottom: 4px; }
+    .accom-type-card .preco { color: var(--azul-claro); font-weight: 700; font-size: 1rem; }
+    .accom-type-card .info { color: var(--cinza-500); font-size: 0.75rem; margin-top: 4px; }
+    .accom-type-card .disponiveis {
+      margin-top: 8px;
+      font-size: 0.72rem;
+      background: var(--verde-claro);
+      color: #155724;
+      padding: 3px 8px;
+      border-radius: 10px;
+      display: inline-block;
+    }
+
+    /* ACOMPANHANTES */
+    .acomp-container {
+      border: 1px solid var(--cinza-200);
+      border-radius: var(--raio);
+      padding: 16px;
+      margin-bottom: 12px;
+      background: var(--cinza-100);
+      position: relative;
+    }
+
+    .acomp-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--azul-medio);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* UPLOAD */
+    .upload-area {
+      border: 2px dashed var(--cinza-300);
+      border-radius: var(--raio);
+      padding: 28px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .upload-area:hover { border-color: var(--azul-claro); background: var(--azul-suave); }
+    .upload-area.uploaded { border-color: var(--verde); background: var(--verde-claro); }
+
+    .upload-area i { font-size: 2rem; color: var(--cinza-500); margin-bottom: 10px; display: block; }
+    .upload-area p { color: var(--cinza-700); font-size: 0.875rem; }
+    .upload-area small { color: var(--cinza-500); font-size: 0.75rem; }
+
+    /* TERMS */
+    .terms-box {
+      background: var(--cinza-100);
+      border: 1px solid var(--cinza-200);
+      border-radius: var(--raio);
+      padding: 16px;
+      max-height: 180px;
+      overflow-y: auto;
+      font-size: 0.8rem;
+      color: var(--cinza-700);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    /* STEP VISIBILITY */
+    .step-section { display: none; }
+    .step-section.active { display: block; }
+
+    /* SUCESSO */
+    .success-screen {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .success-icon {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--verde), #218838);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: white;
+      margin: 0 auto 24px;
+      box-shadow: 0 8px 24px rgba(40,167,69,0.3);
+    }
+
+    @media (max-width: 600px) {
+      .inscricao-header, .inscricao-form, .inscricao-footer, .stepper-bar { padding: 20px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div id="toastContainer" class="toast-container"></div>
+
+  <div class="inscricao-wrapper">
+    <!-- HEADER -->
+    <div class="inscricao-header">
+      <img src="https://sspark.genspark.ai/cfimages?u1=Wk24Iwt0vbKZ%2Fy8LL7co7UeRYXVYdQRRIKD%2F6iXzE5vIIWo3JZfIlvbJe5DdSa9OVXZXHcYN9LKKwrAlz2i8kIShOHKpWhano8ZISMFhbhXdGAT1eRxEd68hYAYgmNo7k6%2BvpJbPi2Wa4vop%2FnnN2vVtGTk%3D&u2=785OrhxFe5ifE7JK&width=2560" alt="Logo" onerror="this.style.display='none'">
+      <div>
+        <h1>Retiro Espiritual 2027</h1>
+        <p>"Enraizar. Crescer. Frutificar."</p>
+        <small>Igreja Batista Lírio Armação | 05 a 10 de Fevereiro de 2027</small>
+      </div>
+    </div>
+
+    <!-- STEPPER -->
+    <div class="stepper-bar">
+      <div class="stepper" id="stepper">
+        <div class="step-wrapper" id="sw-1">
+          <div class="step active" id="step-1">
+            <div class="step-circle">1</div>
+          </div>
+          <div class="step-label">Dados Pessoais</div>
+        </div>
+        <div class="step-line" id="sl-1"></div>
+        <div class="step-wrapper" id="sw-2">
+          <div class="step" id="step-2">
+            <div class="step-circle">2</div>
+          </div>
+          <div class="step-label">Acomodação</div>
+        </div>
+        <div class="step-line" id="sl-2"></div>
+        <div class="step-wrapper" id="sw-3">
+          <div class="step" id="step-3">
+            <div class="step-circle">3</div>
+          </div>
+          <div class="step-label">Acompanhantes</div>
+        </div>
+        <div class="step-line" id="sl-3"></div>
+        <div class="step-wrapper" id="sw-4">
+          <div class="step" id="step-4">
+            <div class="step-circle">4</div>
+          </div>
+          <div class="step-label">Pagamento</div>
+        </div>
+        <div class="step-line" id="sl-4"></div>
+        <div class="step-wrapper" id="sw-5">
+          <div class="step" id="step-5">
+            <div class="step-circle">5</div>
+          </div>
+          <div class="step-label">Confirmação</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORM BODY -->
+    <div class="inscricao-form">
+
+      <!-- STEP 1: DADOS PESSOAIS -->
+      <div class="step-section active" id="sec-1">
+        <div class="form-section-title">
+          <i class="fas fa-user"></i> Dados Pessoais do Titular
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Nome Completo <span class="required">*</span></label>
+            <input type="text" class="form-control" id="f-nome" placeholder="Seu nome completo" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Data de Nascimento <span class="required">*</span></label>
+            <input type="date" class="form-control" id="f-nascimento" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">CPF <span class="required">*</span></label>
+            <input type="text" class="form-control" id="f-cpf" placeholder="000.000.000-00" maxlength="14" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email <span class="required">*</span></label>
+            <input type="email" class="form-control" id="f-email" placeholder="seu@email.com" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Celular / WhatsApp <span class="required">*</span></label>
+            <input type="text" class="form-control" id="f-celular" placeholder="(00) 00000-0000" maxlength="15" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Sexo <span class="required">*</span></label>
+            <select class="form-control" id="f-sexo" required>
+              <option value="">Selecione...</option>
+              <option value="M">Masculino</option>
+              <option value="F">Feminino</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-section-title" style="margin-top:24px;">
+          <i class="fas fa-notes-medical"></i> Informações de Saúde e Necessidades
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Restrições Alimentares</label>
+          <input type="text" class="form-control" id="f-restricoes" placeholder="Ex: Vegetariano, sem glúten, alergia a amendoim...">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Necessidades Especiais (PCD)</label>
+          <input type="text" class="form-control" id="f-pcd" placeholder="Descreva se você possui necessidades especiais...">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Observações Gerais</label>
+          <textarea class="form-control" id="f-obs" rows="2" placeholder="Outras informações relevantes..."></textarea>
+        </div>
+      </div>
+
+      <!-- STEP 2: ACOMODAÇÃO -->
+      <div class="step-section" id="sec-2">
+        <div class="form-section-title">
+          <i class="fas fa-bed"></i> Escolha sua Acomodação
+        </div>
+        <p style="color:var(--cinza-500);font-size:0.875rem;margin-bottom:20px;">
+          Selecione o tipo de acomodação desejado. Os preços incluem todo o período do retiro (5 noites).
+        </p>
+
+        <div class="accom-type-grid" id="accomTypeGrid"></div>
+
+        <div id="accomAlert" class="alert alert-info" style="display:none">
+          <i class="fas fa-info-circle"></i>
+          <span id="accomAlertText"></span>
+        </div>
+      </div>
+
+      <!-- STEP 3: ACOMPANHANTES -->
+      <div class="step-section" id="sec-3">
+        <div class="form-section-title">
+          <i class="fas fa-users"></i> Acompanhantes
+        </div>
+        <div id="acompInfo" class="alert alert-info mb-16">
+          <i class="fas fa-info-circle"></i>
+          <span>Selecione uma acomodação primeiro para ver as opções de acompanhantes.</span>
+        </div>
+        <div id="acompContainer"></div>
+      </div>
+
+      <!-- STEP 4: PAGAMENTO -->
+      <div class="step-section" id="sec-4">
+        <div class="form-section-title">
+          <i class="fas fa-dollar-sign"></i> Informações de Pagamento
+        </div>
+
+        <div class="card mb-16" style="background: var(--azul-suave); border: 1px solid var(--azul-claro);">
+          <div class="card-body">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+              <div>
+                <div style="font-size:0.8rem;color:var(--cinza-500);margin-bottom:4px;">Total a pagar</div>
+                <div style="font-size:2rem;font-weight:800;color:var(--azul-escuro)" id="totalPagar">R$ 0,00</div>
+                <div style="font-size:0.8rem;color:var(--cinza-500)" id="accomSelecionada">Nenhuma acomodação selecionada</div>
+              </div>
+              <div style="text-align:right">
+                <div style="font-size:0.8rem;color:var(--cinza-500)">Chave PIX</div>
+                <div style="font-weight:700;color:var(--azul-escuro);font-size:0.95rem"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4c20253e25232d3e212d2f2d230c2b212d2520622f2321">[email&#160;protected]</a></div>
+                <div style="font-size:0.75rem;color:var(--cinza-500)">Igreja Batista Lírio Armação</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Forma de Pagamento <span class="required">*</span></label>
+            <select class="form-control" id="f-pagamento" onchange="updateParcelamento()">
+              <option value="">Selecione...</option>
+              <option value="pix">PIX</option>
+              <option value="cartao">Cartão de Crédito</option>
+              <option value="transferencia">Transferência Bancária</option>
+              <option value="dinheiro">Dinheiro</option>
+              <option value="boleto">Boleto</option>
+            </select>
+          </div>
+          <div class="form-group" id="parcelasGroup" style="display:none">
+            <label class="form-label">Número de Parcelas</label>
+            <select class="form-control" id="f-parcelas">
+              <option value="1">1x (à vista)</option>
+              <option value="2">2x</option>
+              <option value="3">3x</option>
+              <option value="4">4x</option>
+              <option value="5">5x</option>
+              <option value="6">6x</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Comprovante de Pagamento / Sinal</label>
+          <div class="upload-area" id="uploadArea" onclick="document.getElementById('f-comprovante').click()">
+            <i class="fas fa-cloud-upload-alt" id="uploadIcon"></i>
+            <p id="uploadText">Clique para anexar o comprovante</p>
+            <small>Formatos: JPG, PNG, PDF - Máx. 5MB</small>
+          </div>
+          <input type="file" id="f-comprovante" accept=".jpg,.jpeg,.png,.pdf" style="display:none" onchange="handleUpload(this)">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Observações de Pagamento</label>
+          <textarea class="form-control" id="f-obs-pag" rows="2" placeholder="Informações adicionais sobre o pagamento..."></textarea>
+        </div>
+      </div>
+
+      <!-- STEP 5: CONFIRMAÇÃO -->
+      <div class="step-section" id="sec-5">
+        <div class="form-section-title">
+          <i class="fas fa-check-circle"></i> Confirmar Inscrição
+        </div>
+
+        <!-- RESUMO -->
+        <div id="resumoInscricao"></div>
+
+        <!-- TERMOS -->
+        <div class="form-section-title" style="margin-top:24px;">
+          <i class="fas fa-file-contract"></i> Termos e Condições
+        </div>
+
+        <div class="terms-box">
+          <strong>1. INSCRIÇÃO E CONFIRMAÇÃO</strong><br>
+          A inscrição será confirmada somente após a validação do comprovante de pagamento pela equipe financeira da Igreja Batista Lírio Armação. A reserva do apartamento ficará em status de "pré-reserva" até a confirmação do pagamento.<br><br>
+
+          <strong>2. CANCELAMENTO E REEMBOLSO</strong><br>
+          Cancelamentos realizados com mais de 30 dias de antecedência: reembolso de 80% do valor pago. Entre 15 e 30 dias: reembolso de 50%. Menos de 15 dias: sem reembolso. Em caso de substituição de titular, comunicar com antecedência mínima de 7 dias.<br><br>
+
+          <strong>3. REGRAS DO EVENTO</strong><br>
+          Os participantes devem respeitar os horários e programações do retiro. Bebidas alcoólicas e cigarros não são permitidos no evento. Menores de 18 anos devem estar acompanhados de responsável legal.<br><br>
+
+          <strong>4. ACOMODAÇÕES</strong><br>
+          As acomodações seguem a divisão por gênero nos alojamentos. Os apartamentos serão disponibilizados conforme disponibilidade no momento da confirmação do pagamento. Em caso de indisponibilidade, o inscrito será direcionado à fila de espera.<br><br>
+
+          <strong>5. ALIMENTAÇÃO</strong><br>
+          As refeições incluídas no pacote seguem o cardápio definido pela organização. Restrições alimentares devem ser informadas no formulário de inscrição com antecedência mínima de 15 dias antes do evento.<br><br>
+
+          <strong>6. RESPONSABILIDADE</strong><br>
+          A Igreja Batista Lírio Armação não se responsabiliza por pertences pessoais perdidos, roubados ou danificados durante o retiro. Os participantes são responsáveis por seus próprios pertences.
+        </div>
+
+        <div style="display:flex;align-items:flex-start;gap:12px;">
+          <input type="checkbox" id="f-termos" style="width:18px;height:18px;margin-top:2px;cursor:pointer;">
+          <label for="f-termos" style="cursor:pointer;font-size:0.875rem;color:var(--cinza-700);">
+            Li e concordo com os <strong>Termos e Condições</strong> do Retiro Espiritual 2027 da Igreja Batista Lírio Armação.
+          </label>
+        </div>
+
+        <div id="successScreen" class="success-screen" style="display:none">
+          <div class="success-icon"><i class="fas fa-check"></i></div>
+          <h2 style="color:var(--verde);margin-bottom:12px;">Inscrição Realizada!</h2>
+          <p style="color:var(--cinza-700);margin-bottom:8px;">Sua inscrição foi recebida com sucesso.</p>
+          <p style="color:var(--cinza-500);font-size:0.875rem;margin-bottom:24px;" id="numInscricao"></p>
+          <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+            <a href="index.html" class="btn btn-outline"><i class="fas fa-home"></i> Voltar ao Início</a>
+            <a href="login.html" class="btn btn-primary"><i class="fas fa-user"></i> Área do Retirante</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER NAVIGATION -->
+    <div class="inscricao-footer">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="btn btn-outline" id="btnVoltar" onclick="navStep(-1)" style="display:none">
+          <i class="fas fa-arrow-left"></i> Voltar
+        </button>
+        <a href="index.html" style="color:var(--cinza-500);font-size:0.85rem;text-decoration:none;">
+          <i class="fas fa-home"></i> Início
+        </a>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span style="font-size:0.8rem;color:var(--cinza-500)" id="stepInfo">Etapa 1 de 5</span>
+        <button class="btn btn-primary" id="btnProximo" onclick="navStep(1)">
+          Próximo <i class="fas fa-arrow-right"></i>
+        </button>
+        <button class="btn btn-dourado" id="btnFinalizar" style="display:none" onclick="finalizarInscricao()">
+          <i class="fas fa-check"></i> Finalizar Inscrição
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="js/app.js"></script>
+  <script>
+    let currentStep = 1;
+    const totalSteps = 5;
+    let selectedAccom = null;
+    let acompanhantesData = [];
+
+    // ===== INIT =====
+    document.addEventListener('DOMContentLoaded', () => {
+      maskCPF(document.getElementById('f-cpf'));
+      maskPhone(document.getElementById('f-celular'));
+      renderAccomTypes();
+    });
+
+    // ===== RENDER ACOMODAÇÃO TIPOS =====
+    async function renderAccomTypes() {
+      const grid = document.getElementById('accomTypeGrid');
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--cinza-500)"><i class="fas fa-spinner fa-spin"></i> Carregando disponibilidade...</div>';
+
+      try {
+        const res = await apiGet('acomodacoes');
+        const apts = res.data || [];
+
+        // Contar disponíveis por tipo
+        const countByType = {};
+        apts.forEach(apt => {
+          if (!countByType[apt.tipo]) countByType[apt.tipo] = { total: 0, disponivel: 0 };
+          countByType[apt.tipo].total++;
+          if (apt.status === 'disponivel') countByType[apt.tipo].disponivel++;
+        });
+
+        const tipos = [
+          { id: 'duplo', nome: 'Duplo', icone: '🌸', preco: 4000, info: 'Até 2 pessoas', extra: 'Séries: Flores' },
+          { id: 'triplo', nome: 'Triplo', icone: '🍊', preco: 5400, info: 'Até 3 pessoas', extra: 'Séries: Frutas' },
+          { id: 'quadruplo', nome: 'Quádruplo', icone: '🐦', preco: 6600, info: 'Até 4 pessoas', extra: 'Séries: Pássaros' },
+          { id: 'quintuplo', nome: 'Quíntuplo', icone: '🌳', preco: 7500, info: 'Até 5 pessoas', extra: 'Séries: Árvores' },
+          { id: 'suite_master', nome: 'Suíte Master', icone: '⭐', preco: 6500, info: 'Até 4 pessoas', extra: 'Exclusivo' },
+          { id: 'alojamento_feminino', nome: 'Alojamento Feminino', icone: '👩', preco: 1300, info: 'Apenas mulheres', extra: '1 pessoa por vaga' },
+          { id: 'alojamento_masculino', nome: 'Alojamento Masculino', icone: '👨', preco: 1300, info: 'Apenas homens', extra: '1 pessoa por vaga' }
+        ];
+
+        grid.innerHTML = '';
+        tipos.forEach(t => {
+          const cnt = countByType[t.id] || { total: 0, disponivel: 0 };
+          const isDisponivel = cnt.disponivel > 0;
+          const card = document.createElement('div');
+          card.className = `accom-type-card${!isDisponivel ? ' indisponivel' : ''}`;
+          card.dataset.tipo = t.id;
+          card.dataset.preco = t.preco;
+          card.innerHTML = `
+            <span class="icon">${t.icone}</span>
+            <div class="nome">${t.nome}</div>
+            <div class="preco">R$ ${t.preco.toLocaleString('pt-BR')}</div>
+            <div class="info">${t.info} | ${t.extra}</div>
+            ${isDisponivel 
+              ? `<div class="disponiveis"><i class="fas fa-check-circle"></i> ${cnt.disponivel} disponíve${cnt.disponivel>1?'is':'l'}</div>`
+              : `<div class="disponiveis" style="background:#f8d7da;color:#721c24"><i class="fas fa-times-circle"></i> Sem vagas</div>`
+            }
+          `;
+          if (isDisponivel) {
+            card.addEventListener('click', () => selectAccomType(t, card));
+          }
+          grid.appendChild(card);
+        });
+      } catch(e) {
+        grid.innerHTML = '<div class="alert alert-danger" style="grid-column:1/-1"><i class="fas fa-exclamation-circle"></i> Erro ao carregar acomodações.</div>';
+      }
+    }
+
+    function selectAccomType(tipo, card) {
+      document.querySelectorAll('.accom-type-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      selectedAccom = tipo;
+
+      document.getElementById('accomAlert').style.display = 'flex';
+      document.getElementById('accomAlertText').textContent = 
+        `Você selecionou: ${tipo.nome} - R$ ${tipo.preco.toLocaleString('pt-BR')} por apartamento`;
+
+      renderAcompanhantes(tipo.id);
+      updateTotais();
+    }
+
+    // ===== ACOMPANHANTES =====
+    function renderAcompanhantes(tipoId) {
+      const container = document.getElementById('acompContainer');
+      const info = document.getElementById('acompInfo');
+
+      const config = TIPOS_ACOMODACAO[tipoId];
+      if (!config) return;
+
+      if (tipoId === 'alojamento_feminino' || tipoId === 'alojamento_masculino') {
+        info.style.display = 'flex';
+        info.innerHTML = '<i class="fas fa-info-circle"></i> Os alojamentos são individuais. Cada pessoa deve fazer sua própria inscrição.';
+        container.innerHTML = '';
+        acompanhantesData = [];
+        return;
+      }
+
+      info.style.display = 'none';
+      container.innerHTML = '';
+      acompanhantesData = [];
+
+      // Adultos
+      for (let i = 1; i <= config.adultos; i++) {
+        container.appendChild(createAcompForm(i, 'adulto'));
+      }
+      // Crianças
+      for (let i = 1; i <= config.criancas; i++) {
+        container.appendChild(createAcompForm(i, 'crianca'));
+      }
+    }
+
+    function createAcompForm(idx, tipo) {
+      const div = document.createElement('div');
+      div.className = 'acomp-container';
+      div.dataset.idx = idx;
+      div.dataset.tipo = tipo;
+      const label = tipo === 'adulto' 
+        ? `<i class="fas fa-user"></i> Adulto ${idx}` 
+        : `<i class="fas fa-child"></i> Criança ${idx}`;
+      div.innerHTML = `
+        <div class="acomp-title">
+          <span>${label}</span>
+          <span style="font-size:0.7rem;color:var(--cinza-500);font-weight:400">${tipo === 'adulto' ? '18 anos ou mais' : 'Menor de 18 anos'}</span>
+        </div>
+        <div class="form-row">
+          <div class="form-group mb-0">
+            <label class="form-label" style="font-size:0.8rem;">Nome Completo</label>
+            <input type="text" class="form-control" placeholder="Nome do acompanhante" data-field="nome" data-acomp="${idx}-${tipo}">
+          </div>
+          <div class="form-group mb-0">
+            <label class="form-label" style="font-size:0.8rem;">Data de Nascimento</label>
+            <input type="date" class="form-control" data-field="nascimento" data-acomp="${idx}-${tipo}">
+          </div>
+        </div>
+        <div class="form-row" style="margin-top:12px;">
+          <div class="form-group mb-0">
+            <label class="form-label" style="font-size:0.8rem;">CPF ${tipo === 'adulto' ? '' : '(opcional)'}</label>
+            <input type="text" class="form-control" placeholder="000.000.000-00" maxlength="14" data-field="cpf" data-acomp="${idx}-${tipo}">
+          </div>
+          <div class="form-group mb-0">
+            <label class="form-label" style="font-size:0.8rem;">Sexo</label>
+            <select class="form-control" data-field="sexo" data-acomp="${idx}-${tipo}">
+              <option value="">Selecione</option>
+              <option value="M">Masculino</option>
+              <option value="F">Feminino</option>
+            </select>
+          </div>
+        </div>
+      `;
+      // Aplicar máscara CPF
+      const cpfInput = div.querySelector('[data-field="cpf"]');
+      maskCPF(cpfInput);
+      return div;
+    }
+
+    function getAcompanhantesData() {
+      const data = [];
+      document.querySelectorAll('.acomp-container').forEach(c => {
+        const nome = c.querySelector('[data-field="nome"]')?.value?.trim();
+        if (!nome) return;
+        data.push({
+          nome,
+          nascimento: c.querySelector('[data-field="nascimento"]')?.value || '',
+          cpf: c.querySelector('[data-field="cpf"]')?.value || '',
+          sexo: c.querySelector('[data-field="sexo"]')?.value || '',
+          tipo: c.dataset.tipo
+        });
+      });
+      return data;
+    }
+
+    // ===== PAGAMENTO =====
+    function updateParcelamento() {
+      const forma = document.getElementById('f-pagamento').value;
+      const group = document.getElementById('parcelasGroup');
+      group.style.display = forma === 'cartao' ? 'block' : 'none';
+    }
+
+    function updateTotais() {
+      if (!selectedAccom) return;
+      document.getElementById('totalPagar').textContent = `R$ ${selectedAccom.preco.toLocaleString('pt-BR')},00`;
+      document.getElementById('accomSelecionada').textContent = `Acomodação: ${selectedAccom.nome}`;
+    }
+
+    function handleUpload(input) {
+      const file = input.files[0];
+      if (!file) return;
+      const area = document.getElementById('uploadArea');
+      const icon = document.getElementById('uploadIcon');
+      const text = document.getElementById('uploadText');
+      area.classList.add('uploaded');
+      icon.className = 'fas fa-check-circle';
+      icon.style.color = 'var(--verde)';
+      text.textContent = `✓ ${file.name}`;
+    }
+
+    // ===== RESUMO =====
+    function buildResumo() {
+      const nome = document.getElementById('f-nome').value;
+      const email = document.getElementById('f-email').value;
+      const celular = document.getElementById('f-celular').value;
+      const cpf = document.getElementById('f-cpf').value;
+      const acomps = getAcompanhantesData();
+      const forma = document.getElementById('f-pagamento').value || '-';
+      const parcelas = document.getElementById('f-parcelas')?.value || '1';
+
+      const formaLabel = { pix:'PIX', cartao:'Cartão de Crédito', transferencia:'Transferência', dinheiro:'Dinheiro', boleto:'Boleto' }[forma] || forma;
+
+      let acompHTML = acomps.length > 0 
+        ? acomps.map(a => `<div style="padding:6px 0;border-bottom:1px solid var(--cinza-200);font-size:0.875rem;color:var(--cinza-700);">${a.nome} (${a.tipo === 'adulto' ? 'Adulto' : 'Criança'})</div>`).join('')
+        : '<p style="color:var(--cinza-500);font-size:0.875rem;">Nenhum acompanhante informado.</p>';
+
+      return `
+        <div class="card">
+          <div class="card-body">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;flex-wrap:wrap;">
+              <div>
+                <div class="form-section-title" style="border-color:var(--azul-claro);font-size:0.875rem;margin-bottom:12px;"><i class="fas fa-user"></i> Titular</div>
+                <div style="font-size:0.875rem;line-height:2;color:var(--cinza-700);">
+                  <div><strong>Nome:</strong> ${nome}</div>
+                  <div><strong>CPF:</strong> ${cpf}</div>
+                  <div><strong>Email:</strong> ${email}</div>
+                  <div><strong>Celular:</strong> ${celular}</div>
+                </div>
+              </div>
+              <div>
+                <div class="form-section-title" style="border-color:var(--dourado);font-size:0.875rem;margin-bottom:12px;"><i class="fas fa-bed"></i> Acomodação</div>
+                <div style="font-size:0.875rem;line-height:2;color:var(--cinza-700);">
+                  <div><strong>Tipo:</strong> ${selectedAccom ? selectedAccom.nome : '-'}</div>
+                  <div><strong>Valor:</strong> <span style="color:var(--azul-claro);font-weight:700;">R$ ${selectedAccom ? selectedAccom.preco.toLocaleString('pt-BR') : 0},00</span></div>
+                  <div><strong>Pagamento:</strong> ${formaLabel} ${parcelas > 1 ? `(${parcelas}x)` : ''}</div>
+                </div>
+              </div>
+            </div>
+            ${acomps.length > 0 ? `
+              <div style="margin-top:16px;">
+                <div class="form-section-title" style="border-color:var(--verde);font-size:0.875rem;margin-bottom:12px;"><i class="fas fa-users"></i> Acompanhantes (${acomps.length})</div>
+                ${acompHTML}
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    // ===== NAVEGAÇÃO =====
+    function navStep(dir) {
+      const nextStep = currentStep + dir;
+      if (nextStep < 1 || nextStep > totalSteps) return;
+
+      if (dir > 0 && !validateStep(currentStep)) return;
+
+      // Update stepper visual
+      const curStepEl = document.getElementById(`step-${currentStep}`);
+      if (dir > 0) {
+        curStepEl.classList.remove('active');
+        curStepEl.classList.add('completed');
+        curStepEl.querySelector('.step-circle').innerHTML = '<i class="fas fa-check" style="font-size:0.8rem"></i>';
+      } else {
+        const prevStepEl = document.getElementById(`step-${nextStep}`);
+        prevStepEl.classList.remove('completed');
+        prevStepEl.classList.add('active');
+        prevStepEl.querySelector('.step-circle').textContent = nextStep;
+        curStepEl.classList.remove('active');
+        curStepEl.querySelector('.step-circle').textContent = currentStep;
+      }
+
+      document.getElementById(`sec-${currentStep}`).classList.remove('active');
+      currentStep = nextStep;
+      document.getElementById(`sec-${currentStep}`).classList.add('active');
+
+      if (dir > 0) {
+        document.getElementById(`step-${currentStep}`).classList.add('active');
+      }
+
+      // Update buttons
+      document.getElementById('btnVoltar').style.display = currentStep > 1 ? 'inline-flex' : 'none';
+      document.getElementById('btnProximo').style.display = currentStep < totalSteps ? 'inline-flex' : 'none';
+      document.getElementById('btnFinalizar').style.display = currentStep === totalSteps ? 'inline-flex' : 'none';
+      document.getElementById('stepInfo').textContent = `Etapa ${currentStep} de ${totalSteps}`;
+
+      // Special step actions
+      if (currentStep === 4) updateTotais();
+      if (currentStep === 5) {
+        document.getElementById('resumoInscricao').innerHTML = buildResumo();
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ===== VALIDAÇÃO =====
+    function validateStep(step) {
+      if (step === 1) {
+        const nome = document.getElementById('f-nome').value.trim();
+        const nasc = document.getElementById('f-nascimento').value;
+        const cpf = document.getElementById('f-cpf').value.replace(/\D/g,'');
+        const email = document.getElementById('f-email').value.trim();
+        const cel = document.getElementById('f-celular').value.replace(/\D/g,'');
+        const sexo = document.getElementById('f-sexo').value;
+
+        if (!nome) { showToast('Por favor, informe seu nome completo.', 'error'); return false; }
+        if (!nasc) { showToast('Por favor, informe sua data de nascimento.', 'error'); return false; }
+        if (cpf.length < 11) { showToast('Por favor, informe um CPF válido.', 'error'); return false; }
+        if (!email || !email.includes('@')) { showToast('Por favor, informe um email válido.', 'error'); return false; }
+        if (cel.length < 10) { showToast('Por favor, informe um celular válido.', 'error'); return false; }
+        if (!sexo) { showToast('Por favor, informe o sexo.', 'error'); return false; }
+        return true;
+      }
+
+      if (step === 2) {
+        if (!selectedAccom) { showToast('Por favor, selecione um tipo de acomodação.', 'error'); return false; }
+        return true;
+      }
+
+      if (step === 4) {
+        const forma = document.getElementById('f-pagamento').value;
+        if (!forma) { showToast('Por favor, selecione a forma de pagamento.', 'error'); return false; }
+        return true;
+      }
+
+      if (step === 5) {
+        if (!document.getElementById('f-termos').checked) {
+          showToast('Por favor, aceite os termos e condições.', 'error');
+          return false;
+        }
+        return true;
+      }
+
+      return true;
+    }
+
+    // ===== FINALIZAR =====
+    async function finalizarInscricao() {
+      if (!validateStep(5)) return;
+
+      const btn = document.getElementById('btnFinalizar');
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+      btn.disabled = true;
+
+      try {
+        const acomps = getAcompanhantesData();
+        const idInscricao = 'INS-' + Date.now();
+
+        const retirante = {
+          id: idInscricao,
+          nome: document.getElementById('f-nome').value.trim(),
+          data_nascimento: document.getElementById('f-nascimento').value,
+          cpf: document.getElementById('f-cpf').value,
+          celular: document.getElementById('f-celular').value,
+          email: document.getElementById('f-email').value.trim(),
+          sexo: document.getElementById('f-sexo').value,
+          restricoes_alimentares: document.getElementById('f-restricoes').value,
+          necessidades_pcd: document.getElementById('f-pcd').value,
+          observacoes: document.getElementById('f-obs').value,
+          status: 'pendente',
+          perfil: 'retirante',
+          acomodacao_id: selectedAccom?.id || '',
+          acompanhantes: JSON.stringify(acomps),
+          aceite_termos: true,
+          data_inscricao: new Date().toISOString()
+        };
+
+        await apiCreate('retirantes', retirante);
+
+        // Criar pagamento
+        await apiCreate('pagamentos', {
+          retirante_id: idInscricao,
+          retirante_nome: retirante.nome,
+          valor_total: selectedAccom?.preco || 0,
+          valor_pago: 0,
+          valor_pendente: selectedAccom?.preco || 0,
+          forma_pagamento: document.getElementById('f-pagamento').value,
+          parcelas: parseInt(document.getElementById('f-parcelas')?.value || '1'),
+          status: 'pendente',
+          observacoes: document.getElementById('f-obs-pag').value,
+          historico: '[]'
+        });
+
+        showToast('Inscrição realizada com sucesso!', 'success');
+        document.getElementById('btnFinalizar').style.display = 'none';
+        document.getElementById('numInscricao').textContent = `Número de inscrição: ${idInscricao}`;
+        document.getElementById('successScreen').style.display = 'block';
+        document.querySelector('#sec-5 .form-section-title').style.display = 'none';
+        document.getElementById('resumoInscricao').style.display = 'none';
+        document.querySelector('.terms-box').style.display = 'none';
+        document.querySelector('[for="f-termos"]').parentElement.style.display = 'none';
+
+      } catch(err) {
+        showToast('Erro ao realizar inscrição. Tente novamente.', 'error');
+        btn.innerHTML = '<i class="fas fa-check"></i> Finalizar Inscrição';
+        btn.disabled = false;
+      }
+    }
+  </script>
+<script src="https://www.genspark.ai/sandbox_inspect.js"></script></body>
+</html>

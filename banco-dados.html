@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Banco de Dados – Retiro Espiritual 2027</title>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<style>
+  :root {
+    --blue: #1a3a6e;
+    --blue-light: #2a5298;
+    --gold: #c9a84c;
+    --gold-light: #f0c040;
+    --white: #ffffff;
+    --bg: #f0f4f8;
+    --card: #ffffff;
+    --border: #dde3ea;
+    --text: #1e2a3a;
+    --muted: #6b7a8d;
+    --success: #2ecc71;
+    --danger: #e74c3c;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); }
+
+  header {
+    background: linear-gradient(135deg, var(--blue) 0%, var(--blue-light) 100%);
+    color: #fff; padding: 16px 28px;
+    display: flex; align-items: center; gap: 14px;
+    box-shadow: 0 4px 16px rgba(0,0,0,.3);
+    position: sticky; top: 0; z-index: 100;
+    flex-wrap: wrap;
+  }
+  header h1 { font-size: 1.25rem; }
+  header p  { font-size: .78rem; opacity: .8; }
+  .header-actions { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px; border-radius: 8px; border: none;
+    cursor: pointer; font-size: .82rem; font-weight: 600;
+    transition: all .2s; text-decoration: none;
+  }
+  .btn-gold  { background: var(--gold); color: var(--blue); }
+  .btn-gold:hover { background: var(--gold-light); }
+  .btn-white { background: rgba(255,255,255,.15); color: #fff; border: 1px solid rgba(255,255,255,.3); }
+  .btn-white:hover { background: rgba(255,255,255,.25); }
+  .btn-blue  { background: var(--blue); color: #fff; }
+  .btn-blue:hover { background: var(--blue-light); }
+  .btn-sm    { padding: 6px 11px; font-size: .76rem; }
+
+  .container { max-width: 1420px; margin: 0 auto; padding: 24px 18px; }
+
+  /* ── Status cards ── */
+  .status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+    gap: 12px; margin-bottom: 24px;
+  }
+  .stat-card {
+    background: var(--card); border-radius: 12px; padding: 14px 18px;
+    border-left: 4px solid var(--blue);
+    box-shadow: 0 2px 8px rgba(0,0,0,.07); text-align: center;
+  }
+  .stat-card.gold  { border-color: var(--gold); }
+  .stat-card.green { border-color: var(--success); }
+  .stat-card h3 { font-size: 1.7rem; font-weight: 800; color: var(--blue); }
+  .stat-card.gold  h3 { color: #a07020; }
+  .stat-card.green h3 { color: #1a7a45; }
+  .stat-card p  { font-size: .76rem; color: var(--muted); margin-top: 4px; }
+
+  /* ── Tabs ── */
+  .table-nav { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 20px; }
+  .tab-btn {
+    padding: 7px 14px; border-radius: 8px;
+    border: 2px solid var(--border); background: var(--card);
+    cursor: pointer; font-size: .8rem; font-weight: 600;
+    color: var(--muted); transition: all .18s;
+  }
+  .tab-btn:hover { border-color: var(--blue); color: var(--blue); }
+  .tab-btn.active { background: var(--blue); border-color: var(--blue); color: #fff; }
+
+  /* ── Panel ── */
+  .panel { background: var(--card); border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.08);
+    overflow: hidden; display: none; }
+  .panel.active { display: block; }
+
+  .panel-header {
+    padding: 16px 22px;
+    background: linear-gradient(135deg, var(--blue), var(--blue-light));
+    color: #fff; display: flex; align-items: center;
+    justify-content: space-between; flex-wrap: wrap; gap: 8px;
+  }
+  .panel-header h2 { font-size: 1rem; display: flex; align-items: center; gap: 7px; }
+  .badge {
+    background: rgba(255,255,255,.2); padding: 1px 9px;
+    border-radius: 20px; font-size: .72rem; margin-left: 6px;
+  }
+  .panel-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  /* ── Table ── */
+  .tbl-wrap { overflow-x: auto; max-height: 540px; overflow-y: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: .81rem; }
+  thead th {
+    position: sticky; top: 0;
+    background: #f4f6fb; color: var(--blue);
+    padding: 9px 13px; text-align: left; font-weight: 700;
+    border-bottom: 2px solid var(--border); white-space: nowrap;
+  }
+  tbody tr { border-bottom: 1px solid var(--border); }
+  tbody tr:hover { background: #f7f9fd; }
+  tbody td { padding: 8px 13px; vertical-align: top; max-width: 210px; word-break: break-word; }
+  .empty-row td { text-align: center; color: var(--muted); padding: 50px; font-style: italic; }
+
+  /* ── Chips ── */
+  .chip {
+    display: inline-block; padding: 2px 8px; border-radius: 20px;
+    font-size: .7rem; font-weight: 700; text-transform: uppercase;
+  }
+  .chip-green  { background: #d4f5e4; color: #1a7a45; }
+  .chip-red    { background: #fde8e8; color: #c0392b; }
+  .chip-yellow { background: #fef9e5; color: #a07c00; }
+  .chip-blue   { background: #e3eeff; color: #1a3a6e; }
+  .chip-gray   { background: #eef0f3; color: #5a6677; }
+
+  /* ── Loading ── */
+  .loading { text-align: center; padding: 50px; color: var(--muted); }
+  .spinner {
+    width: 34px; height: 34px; border: 4px solid var(--border);
+    border-top-color: var(--blue); border-radius: 50%;
+    animation: spin .7s linear infinite; display: inline-block; margin-bottom: 10px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Export modal ── */
+  #exportModal {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,.5); z-index: 300;
+    align-items: center; justify-content: center;
+  }
+  #exportModal.open { display: flex; }
+  .modal-box {
+    background: #fff; border-radius: 16px; padding: 32px;
+    max-width: 460px; width: 92%; box-shadow: 0 8px 40px rgba(0,0,0,.25);
+  }
+  .modal-box h3 { font-size: 1.15rem; color: var(--blue); margin-bottom: 6px; }
+  .modal-box p  { color: var(--muted); font-size: .83rem; margin-bottom: 22px; }
+  .modal-close  { float: right; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--muted); }
+  .export-grid  { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .export-card  {
+    border: 2px solid var(--border); border-radius: 12px; padding: 18px;
+    text-align: center; cursor: pointer; transition: all .2s;
+  }
+  .export-card:hover { border-color: var(--blue); background: #f0f4ff; }
+  .export-card i  { font-size: 1.8rem; margin-bottom: 7px; display: block; }
+  .export-card.json i { color: #e67e22; }
+  .export-card.xlsx i { color: #27ae60; }
+  .export-card.csv  i { color: #8e44ad; }
+  .export-card.all  i { color: var(--blue); }
+  .export-card span { font-weight: 700; font-size: .88rem; display: block; }
+  .export-card small { color: var(--muted); font-size: .73rem; }
+
+  /* ── Toast ── */
+  #toast {
+    position: fixed; bottom: 28px; right: 28px;
+    background: var(--blue); color: #fff;
+    padding: 12px 20px; border-radius: 10px;
+    box-shadow: 0 4px 18px rgba(0,0,0,.25);
+    font-size: .86rem; font-weight: 600;
+    opacity: 0; pointer-events: none;
+    transition: opacity .3s; z-index: 9999;
+  }
+  #toast.show { opacity: 1; }
+
+  @media (max-width: 580px) {
+    .export-grid { grid-template-columns: 1fr; }
+    .header-actions { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<header>
+  <div>
+    <h1><i class="fas fa-database"></i> Banco de Dados</h1>
+    <p>Retiro Espiritual 2027 · Visualização e Exportação</p>
+  </div>
+  <div class="header-actions">
+    <button class="btn btn-gold" onclick="openExportModal()">
+      <i class="fas fa-download"></i> Exportar Tudo
+    </button>
+    <button class="btn btn-white" onclick="refreshAll()">
+      <i class="fas fa-sync-alt"></i> Atualizar
+    </button>
+    <a href="dashboard.html" class="btn btn-white">
+      <i class="fas fa-arrow-left"></i> Painel
+    </a>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- ── KPIs ── -->
+  <div class="status-grid" id="statusGrid">
+    <div class="stat-card">
+      <div class="spinner" style="width:22px;height:22px;border-width:3px;margin:0 auto 6px"></div>
+      <p>Carregando...</p>
+    </div>
+  </div>
+
+  <!-- ── Tabs ── -->
+  <div class="table-nav" id="tableNav"></div>
+
+  <!-- ── Panels ── -->
+  <div id="panels"></div>
+
+</div>
+
+<!-- ══ EXPORT MODAL ══ -->
+<div id="exportModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeExportModal()">×</button>
+    <h3><i class="fas fa-database" style="color:var(--blue)"></i> Exportar Banco de Dados</h3>
+    <p>Todas as 9 tabelas serão exportadas no formato escolhido.</p>
+    <div class="export-grid">
+      <div class="export-card json" onclick="exportAll('json')">
+        <i class="fas fa-file-code"></i>
+        <span>JSON</span>
+        <small>Formato universal</small>
+      </div>
+      <div class="export-card xlsx" onclick="exportAll('xlsx')">
+        <i class="fas fa-file-excel"></i>
+        <span>Excel (XLSX)</span>
+        <small>Uma aba por tabela</small>
+      </div>
+      <div class="export-card csv" onclick="exportAll('csv')">
+        <i class="fas fa-file-csv"></i>
+        <span>CSV</span>
+        <small>Um arquivo por tabela</small>
+      </div>
+      <div class="export-card all" onclick="exportAll('all')">
+        <i class="fas fa-archive"></i>
+        <span>Todos os Formatos</span>
+        <small>JSON + XLSX + CSV</small>
+      </div>
+    </div>
+    <div style="margin-top:18px;text-align:right">
+      <button class="btn btn-blue btn-sm" onclick="closeExportModal()">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TOAST ══ -->
+<div id="toast"></div>
+
+<script>
+// ─────────────────────────────────────────────
+//  DEFINIÇÃO DAS TABELAS
+// ─────────────────────────────────────────────
+const TABLES = [
+  {
+    key: 'retirantes', label: 'Retirantes', icon: 'fa-users',
+    cols: [
+      {f:'nome',label:'Nome'},
+      {f:'cpf',label:'CPF'},
+      {f:'celular',label:'Celular'},
+      {f:'email',label:'E-mail'},
+      {f:'sexo',label:'Sexo'},
+      {f:'perfil',label:'Perfil'},
+      {f:'status',label:'Status',chip:true},
+      {f:'acomodacao_id',label:'Acomod.'},
+      {f:'restricoes_alimentares',label:'Restrições'},
+      {f:'aceite_termos',label:'Aceite',bool:true},
+      {f:'data_inscricao',label:'Inscrito em',date:true}
+    ]
+  },
+  {
+    key: 'acomodacoes', label: 'Acomodações', icon: 'fa-bed',
+    cols: [
+      {f:'numero',label:'Nº'},
+      {f:'nome',label:'Nome'},
+      {f:'tipo',label:'Tipo'},
+      {f:'categoria',label:'Categoria'},
+      {f:'capacidade',label:'Cap.'},
+      {f:'preco',label:'Preço',money:true},
+      {f:'status',label:'Status',chip:true},
+      {f:'ocupantes',label:'Ocupantes'},
+      {f:'observacoes',label:'Obs.'}
+    ]
+  },
+  {
+    key: 'pagamentos', label: 'Pagamentos', icon: 'fa-dollar-sign',
+    cols: [
+      {f:'retirante_nome',label:'Retirante'},
+      {f:'valor_total',label:'Total',money:true},
+      {f:'valor_pago',label:'Pago',money:true},
+      {f:'valor_pendente',label:'Pendente',money:true},
+      {f:'forma_pagamento',label:'Forma'},
+      {f:'parcelas',label:'Parcelas'},
+      {f:'status',label:'Status',chip:true},
+      {f:'data_pagamento',label:'Data Pgto',date:true}
+    ]
+  },
+  {
+    key: 'checkins', label: 'Check-in/out', icon: 'fa-door-open',
+    cols: [
+      {f:'retirante_nome',label:'Retirante'},
+      {f:'acomodacao_nome',label:'Acomodação'},
+      {f:'data_checkin',label:'Check-in'},
+      {f:'hora_checkin',label:'Hora IN'},
+      {f:'data_checkout',label:'Check-out'},
+      {f:'hora_checkout',label:'Hora OUT'},
+      {f:'status',label:'Status',chip:true},
+      {f:'responsavel',label:'Responsável'}
+    ]
+  },
+  {
+    key: 'refeicoes', label: 'Refeições', icon: 'fa-utensils',
+    cols: [
+      {f:'retirante_nome',label:'Retirante'},
+      {f:'data',label:'Data'},
+      {f:'cafe_manha',label:'Café',bool:true},
+      {f:'almoco',label:'Almoço',bool:true},
+      {f:'lanche',label:'Lanche',bool:true},
+      {f:'jantar',label:'Jantar',bool:true},
+      {f:'restricoes',label:'Restrições'}
+    ]
+  },
+  {
+    key: 'fila_espera', label: 'Fila de Espera', icon: 'fa-clock',
+    cols: [
+      {f:'retirante_nome',label:'Retirante'},
+      {f:'tipo_acomodacao',label:'Tipo Acom.'},
+      {f:'posicao',label:'Posição'},
+      {f:'data_entrada',label:'Entrada',date:true},
+      {f:'status',label:'Status',chip:true},
+      {f:'observacoes',label:'Obs.'}
+    ]
+  },
+  {
+    key: 'veiculos', label: 'Veículos', icon: 'fa-car',
+    cols: [
+      {f:'condutor',label:'Condutor'},
+      {f:'marca',label:'Marca'},
+      {f:'modelo',label:'Modelo'},
+      {f:'placa',label:'Placa'},
+      {f:'cor',label:'Cor'},
+      {f:'ano',label:'Ano'},
+      {f:'tipo_veiculo',label:'Tipo'},
+      {f:'observacoes',label:'Obs.'}
+    ]
+  },
+  {
+    key: 'despesas', label: 'Despesas', icon: 'fa-receipt',
+    cols: [
+      {f:'descricao',label:'Descrição'},
+      {f:'categoria',label:'Categoria'},
+      {f:'valor_estimado',label:'Estimado',money:true},
+      {f:'valor_confirmado',label:'Confirmado',money:true},
+      {f:'data',label:'Data'},
+      {f:'status',label:'Status',chip:true},
+      {f:'responsavel',label:'Responsável'}
+    ]
+  },
+  {
+    key: 'auditoria', label: 'Auditoria', icon: 'fa-shield-alt',
+    cols: [
+      {f:'usuario',label:'Usuário'},
+      {f:'acao',label:'Ação'},
+      {f:'modulo',label:'Módulo'},
+      {f:'detalhes',label:'Detalhes'},
+      {f:'ip',label:'IP'},
+      {f:'data_hora',label:'Data/Hora',date:true}
+    ]
+  }
+];
+
+// ─────────────────────────────────────────────
+//  STATE
+// ─────────────────────────────────────────────
+const state  = {};
+let activeTab = 'retirantes';
+
+// ─────────────────────────────────────────────
+//  INIT
+// ─────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  buildNav();
+  buildPanels();
+  refreshAll();
+});
+
+// ─────────────────────────────────────────────
+//  NAVEGAÇÃO
+// ─────────────────────────────────────────────
+function buildNav() {
+  document.getElementById('tableNav').innerHTML = TABLES.map(t => `
+    <button class="tab-btn ${t.key === activeTab ? 'active' : ''}"
+            id="tab-${t.key}" onclick="switchTab('${t.key}')">
+      <i class="fas ${t.icon}"></i> ${t.label}
+    </button>`).join('');
+}
+
+function switchTab(key) {
+  activeTab = key;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  const tabEl = document.getElementById('tab-' + key);
+  if (tabEl) tabEl.classList.add('active');
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  const panel = document.getElementById('panel-' + key);
+  if (panel) panel.classList.add('active');
+}
+
+// ─────────────────────────────────────────────
+//  BUILD PANELS
+// ─────────────────────────────────────────────
+function buildPanels() {
+  document.getElementById('panels').innerHTML = TABLES.map(t => `
+    <div class="panel ${t.key === activeTab ? 'active' : ''}" id="panel-${t.key}">
+      <div class="panel-header">
+        <h2><i class="fas ${t.icon}"></i> ${t.label}
+          <span class="badge" id="badge-${t.key}">...</span>
+        </h2>
+        <div class="panel-actions">
+          <button class="btn btn-white btn-sm" onclick="exportTable('${t.key}','json')">
+            <i class="fas fa-file-code"></i> JSON
+          </button>
+          <button class="btn btn-white btn-sm" onclick="exportTable('${t.key}','xlsx')">
+            <i class="fas fa-file-excel"></i> Excel
+          </button>
+          <button class="btn btn-white btn-sm" onclick="exportTable('${t.key}','csv')">
+            <i class="fas fa-file-csv"></i> CSV
+          </button>
+          <button class="btn btn-gold btn-sm" onclick="loadTable('${t.key}')">
+            <i class="fas fa-sync-alt"></i>
+          </button>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="loading" id="loading-${t.key}">
+          <div class="spinner"></div><br>Carregando dados...
+        </div>
+        <div class="tbl-wrap" id="tbl-${t.key}" style="display:none"></div>
+      </div>
+    </div>`).join('');
+}
+
+// ─────────────────────────────────────────────
+//  FETCH (paginação automática)
+// ─────────────────────────────────────────────
+async function fetchAll(tableKey) {
+  let page = 1, all = [], total = 0;
+  while (true) {
+    const r = await fetch(`tables/${tableKey}?page=${page}&limit=200`);
+    if (!r.ok) break;
+    const d = await r.json();
+    const rows = d.data || [];
+    all = all.concat(rows);
+    total = d.total || all.length;
+    if (!rows.length || all.length >= total) break;
+    page++;
+  }
+  return { data: all, total };
+}
+
+async function loadTable(key) {
+  const loadEl  = document.getElementById('loading-' + key);
+  const tblWrap = document.getElementById('tbl-' + key);
+  const badge   = document.getElementById('badge-' + key);
+
+  if (loadEl)  { loadEl.innerHTML  = '<div class="spinner"></div><br>Carregando...'; loadEl.style.display = 'block'; }
+  if (tblWrap) { tblWrap.style.display = 'none'; }
+
+  try {
+    const { data, total } = await fetchAll(key);
+    state[key] = { data, total };
+    if (badge) badge.textContent = total + ' reg.';
+    renderTable(key, data);
+  } catch (e) {
+    console.error('Erro:', key, e);
+    if (loadEl) loadEl.innerHTML = '<i class="fas fa-exclamation-circle" style="color:var(--danger)"></i> Erro ao carregar dados';
+  }
+}
+
+async function refreshAll() {
+  await Promise.all(TABLES.map(t => loadTable(t.key)));
+  updateKPIs();
+}
+
+// ─────────────────────────────────────────────
+//  RENDER TABLE
+// ─────────────────────────────────────────────
+function renderTable(key, data) {
+  const tbl  = TABLES.find(t => t.key === key);
+  const wrap = document.getElementById('tbl-' + key);
+  const load = document.getElementById('loading-' + key);
+  if (!wrap || !tbl) return;
+
+  let rows = '';
+  if (!data || !data.length) {
+    rows = `<tr class="empty-row">
+      <td colspan="${tbl.cols.length}">
+        <i class="fas fa-inbox" style="font-size:2rem;color:#dde3ea;display:block;margin-bottom:8px"></i>
+        Nenhum registro encontrado
+      </td></tr>`;
+  } else {
+    rows = data.map(row => {
+      const cells = tbl.cols.map(c => {
+        let val = row[c.f];
+        if (val === null || val === undefined || val === '') val = '—';
+
+        if (c.bool) {
+          const yes = val === true || val === 'true' || val === 1 || val === '1';
+          return `<td>${yes
+            ? '<span class="chip chip-green">✓ Sim</span>'
+            : '<span class="chip chip-gray">✗ Não</span>'}</td>`;
+        }
+        if (c.money && val !== '—') {
+          const n = parseFloat(val);
+          if (!isNaN(n)) val = 'R$ ' + n.toLocaleString('pt-BR',{minimumFractionDigits:2});
+        }
+        if (c.date && val !== '—') {
+          try {
+            const ts = isNaN(Number(val)) ? new Date(val) : new Date(Number(val));
+            if (!isNaN(ts)) val = ts.toLocaleString('pt-BR');
+          } catch(e) {}
+        }
+        if (c.chip && val !== '—') return `<td>${chipStatus(String(val))}</td>`;
+        return `<td>${String(val).substring(0,150)}</td>`;
+      }).join('');
+      return `<tr>${cells}</tr>`;
+    }).join('');
+  }
+
+  wrap.innerHTML = `
+    <table>
+      <thead><tr>${tbl.cols.map(c=>`<th>${c.label}</th>`).join('')}</tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+  if (load) load.style.display = 'none';
+  wrap.style.display = 'block';
+}
+
+function chipStatus(val) {
+  const v = val.toLowerCase();
+  if (['confirmad','ativo','quitad','pago','check-out'].some(s=>v.includes(s)))
+    return `<span class="chip chip-green">${val}</span>`;
+  if (['cancelad','inativo'].some(s=>v.includes(s)))
+    return `<span class="chip chip-red">${val}</span>`;
+  if (['pendente','pre-reserva','pré-reserva','aguardando'].some(s=>v.includes(s)))
+    return `<span class="chip chip-yellow">${val}</span>`;
+  if (['check-in','disponível','disponivel'].some(s=>v.includes(s)))
+    return `<span class="chip chip-blue">${val}</span>`;
+  return `<span class="chip chip-gray">${val}</span>`;
+}
+
+// ─────────────────────────────────────────────
+//  KPIs
+// ─────────────────────────────────────────────
+function updateKPIs() {
+  const ret   = (state.retirantes  || {}).total || 0;
+  const pgto  = (state.pagamentos  || {}).total || 0;
+  const acms  = (state.acomodacoes || {}).data  || [];
+  const ckIn  = (state.checkins    || {}).total || 0;
+  const vei   = (state.veiculos    || {}).total || 0;
+  const audit = (state.auditoria   || {}).total || 0;
+
+  const ocupadas = acms.filter(a=>a.status&&a.status.toLowerCase().includes('ocup')).length;
+
+  document.getElementById('statusGrid').innerHTML = `
+    <div class="stat-card"><h3>${ret}</h3><p><i class="fas fa-users"></i> Retirantes</p></div>
+    <div class="stat-card gold"><h3>${pgto}</h3><p><i class="fas fa-dollar-sign"></i> Pagamentos</p></div>
+    <div class="stat-card"><h3>${acms.length}</h3><p><i class="fas fa-bed"></i> Acomodações</p></div>
+    <div class="stat-card green"><h3>${ocupadas}</h3><p><i class="fas fa-check-circle"></i> Ocupadas</p></div>
+    <div class="stat-card"><h3>${ckIn}</h3><p><i class="fas fa-door-open"></i> Check-ins</p></div>
+    <div class="stat-card gold"><h3>${vei}</h3><p><i class="fas fa-car"></i> Veículos</p></div>
+    <div class="stat-card"><h3>${audit}</h3><p><i class="fas fa-shield-alt"></i> Auditorias</p></div>
+    <div class="stat-card green"><h3>${TABLES.length}</h3><p><i class="fas fa-table"></i> Tabelas</p></div>
+  `;
+}
+
+// ─────────────────────────────────────────────
+//  EXPORT MODAL
+// ─────────────────────────────────────────────
+function openExportModal()  { document.getElementById('exportModal').classList.add('open'); }
+function closeExportModal() { document.getElementById('exportModal').classList.remove('open'); }
+
+async function exportAll(fmt) {
+  closeExportModal();
+  toast('⏳ Preparando exportação...');
+  // garante dados carregados
+  await Promise.all(TABLES.map(async t => {
+    if (!state[t.key]) await loadTable(t.key);
+  }));
+  if (fmt==='json'||fmt==='all') exportJSON();
+  if (fmt==='xlsx'||fmt==='all') exportXLSX();
+  if (fmt==='csv' ||fmt==='all') TABLES.forEach(t=>exportCSV(t.key));
+  toast('✅ Exportação concluída!');
+}
+
+function exportTable(key, fmt) {
+  if (!state[key]) { toast('Aguarde o carregamento...'); return; }
+  if (fmt==='json') exportJSON(key);
+  if (fmt==='xlsx') exportXLSX(key);
+  if (fmt==='csv')  exportCSV(key);
+  toast(`✅ ${key}.${fmt} baixado!`);
+}
+
+// ── JSON ──
+function exportJSON(key) {
+  let obj = {};
+  if (key) {
+    obj[key] = (state[key]||{}).data || [];
+  } else {
+    TABLES.forEach(t => { obj[t.key] = (state[t.key]||{}).data||[]; });
+    obj._exportado_em = new Date().toISOString();
+    obj._evento = 'Retiro Espiritual 2027';
+  }
+  dlBlob(
+    new Blob([JSON.stringify(obj,null,2)],{type:'application/json'}),
+    (key||'retiro2027-banco-dados')+'.json'
+  );
+}
+
+// ── XLSX ──
+function exportXLSX(key) {
+  const wb = XLSX.utils.book_new();
+  const list = key ? [TABLES.find(t=>t.key===key)] : TABLES;
+  list.forEach(t => {
+    if (!t) return;
+    const rows = (state[t.key]||{}).data||[];
+    const ws = XLSX.utils.json_to_sheet(rows.length ? rows : [{}]);
+    XLSX.utils.book_append_sheet(wb, ws, t.label.substring(0,31));
+  });
+  XLSX.writeFile(wb, (key||'retiro2027-banco-dados')+'.xlsx');
+}
+
+// ── CSV ──
+function exportCSV(key) {
+  const rows = (state[key]||{}).data||[];
+  if (!rows.length) { toast('Sem dados em '+key); return; }
+  const hds = Object.keys(rows[0]);
+  const lines = [
+    hds.join(','),
+    ...rows.map(r=>hds.map(h=>{
+      const v=(r[h]===null||r[h]===undefined)?'':String(r[h]);
+      return '"'+v.replace(/"/g,'""')+'"';
+    }).join(','))
+  ];
+  dlBlob(
+    new Blob(['\uFEFF'+lines.join('\n')],{type:'text/csv;charset=utf-8'}),
+    key+'.csv'
+  );
+}
+
+function dlBlob(blob, name) {
+  const url = URL.createObjectURL(blob);
+  const a = Object.assign(document.createElement('a'),{href:url,download:name});
+  document.body.appendChild(a); a.click();
+  setTimeout(()=>{URL.revokeObjectURL(url);a.remove();},1200);
+}
+
+// ── Toast ──
+function toast(msg, dur=3200) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(()=>el.classList.remove('show'), dur);
+}
+</script>
+</body>
+</html>
